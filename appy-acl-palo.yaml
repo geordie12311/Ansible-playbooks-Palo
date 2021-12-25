@@ -6,7 +6,7 @@
 # pip install xmltodict
 # ansible-galaxy install paloaltonetworks.paloaltonetworks
 # https://www.bountysource.com/issues/59738537-certificate-verify-failed
-#   set verify to disable in the virtual environment
+# et verify to disable in the virtual environment
 
 ---
 - name: Apply ACLs to PAN Firewalls
