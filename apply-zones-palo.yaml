@@ -1,4 +1,4 @@
-# Playbook to appy zoenes to Palo FW
+# Playbook to appy zones to Palo Firewall
 # REQUIREMENTS
 # pip install pan-python
 # pip install pandevice
