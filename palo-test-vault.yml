@@ -1,0 +1,85 @@
+#Ansible playbook for Palo Alto Firewall. It will create a server object called server1, with IP address / description
+# It will create a user object called users-subnet, add a descritpion and apply the IP subnet defined in the script
+# It will then create a management profile that allows PING
+# It will then create a zones (inside and users) as layer 3 and configure the interfaces and apply the management profile
+# Finally it will then create a rule to allow ping traffic from users to server1
+
+---
+
+- name: Palo Alto Playbook
+  hosts: palo
+  gather_facts: false
+  connection: local
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+    - name: Create Server Object
+      panos_address_object:
+        provider: '{{ palo_provider }}'
+        name: 'server1'
+        value: '172.16.1.10'
+        description: 'vmware'
+
+    - name: Create Users Object
+      panos_address_object:
+        provider: '{{ palo_provider }}'
+        name: 'users-subnet'
+        value: '10.10.10.0/24'
+        description: 'users subnet'
+
+    - name: Management Profile
+      panos_management_profile:
+        provider: '{{ palo_provider }}'
+        name: 'Allow Ping'
+        ping: true
+
+    - name: Create INSIDE Zone
+      panos_zone:
+        provider: '{{ palo_provider}}'
+        zone: 'INSIDE'
+        mode: 'layer3' 
+    
+    - name: Create USERS Zone
+      panos_zone:
+        provider: '{{ palo_provider}}'
+        zone: 'USERS'
+        mode: 'layer3'
+
+    - name: ethernet1/1 config
+      panos_interface:
+        provider: '{{ palo_provider }}'
+        if_name: 'ethernet1/1'
+        zone_name: 'INSIDE'
+        management_profile: 'Allow Ping'
+        mode: 'layer3'
+        enable_dhcp: false
+        ip: ['172.16.1.1/24']
+
+    - name: ethernet1/2 config
+      panos_interface:
+        provider: '{{ palo_provider }}'
+        if_name: 'ethernet1/2'
+        zone_name: 'USERS'
+        mode: 'layer3'
+        enable_dhcp: false
+        ip: ['10.10.10.1/24']
+
+    - name: Allow ping from users to server1
+      panos_security_rule:
+        provider: '{{ palo_provider }}'
+        rule_name: 'allow ping'
+        description: 'Allow ping from users to server1'
+        source_zone: ['USERS']
+        source_ip: ['users-subnet']
+        destination_zone: ['INSIDE']
+        destination_ip: ['server1'] 
+        application: ['ping']
+        action: 'allow'
+
+    - name: Commit
+      panos_commit: true
+        provider: '{{ palo_provider }}'
+
+...

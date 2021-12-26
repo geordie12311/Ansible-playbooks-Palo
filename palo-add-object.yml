@@ -1,0 +1,24 @@
+---
+- name: Create object groups
+  hosts: palo
+  gather_facts: false
+  connection: local
+
+  collections:
+    - paloaltonetworks.panos  
+
+
+- name: Create object group 'Prod'
+  panos_address_group:
+    provider: '{{ provider }}'
+    name: 'Prod'
+    static_value: ['Test-One', 'Test-Three']
+    tag: ['Prod']
+
+- name: Create object group 'SI'
+  panos_address_group:
+    provider: '{{ provider }}'
+    name: 'SI'
+    dynamic_value: "'SI_Instances'"
+    tag: ['SI']
+    commit: true

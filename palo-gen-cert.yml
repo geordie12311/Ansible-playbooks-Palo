@@ -1,0 +1,28 @@
+# Ansible playbook for Palo Alto Firewall to generate a self signed certificate
+# Uses the API key to connect to the Firewall
+
+---    
+
+- name: Generate a self-signed Cert
+  hosts: palo
+  gather_facts: false
+  connection: local
+
+  collections:
+    - paloaltonetworks.panos
+
+
+  vars:
+    palo_provider:
+      ip_address: '192.168.1.10'
+      api_key: LUFRPT0xUGNXSEIwWlhTYXJXVkFqYjMxdHl4VGkvMXM9cytDZ2NqQVZKSEF4UU5Td09jcU1LMWhFNFFDU28rekYyWDRQWGI5Vk5STEtxdGFHaytsblczWlAxMFVubHlKMg==
+
+  tasks:
+  - name: generate self signed certificate
+    panos_cert_gen_ssh:
+      ip_address: " {{192.168.1.10 }}"
+      username: " {{ admin }}"
+      password: " {{ Teabag22@ }}"
+      cert_cn: "{{ cn }}"
+      cert_friendly_name: "{{ Ansible-test }}"
+      signed_by: "{{ Self }}"

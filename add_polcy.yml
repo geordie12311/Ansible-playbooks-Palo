@@ -1,0 +1,29 @@
+# Ansible Playbook for Palo Alto Firewall taht will create a security rule
+
+---
+
+- name: Add New Security rule
+  hosts: palo
+  gather_facts: false
+  connection: local
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+    - name: Allow ping from users to server1
+      panos_security_rule:
+        provider: '{{ palo_provider }}'
+        rule_name: 'Ansible test 1'
+        description: 'An Ansible test rule'
+        source_zone: ['Inside']
+        destination_zone: ['Outside']
+        source_ip: ['1.2.3.4']
+        source_user: ['any']
+        destination_ip: ['any']
+        category: ['any']
+        application: ['any']
+        service: ['service-http']
+        action: 'allow'
+        commit: 'True'
+...

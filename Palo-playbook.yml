@@ -1,0 +1,85 @@
+---
+
+- name: Palo Alto Playbook
+  hosts: 192.168.1.10
+  gather_facts: false
+  connection: local
+
+  collections:
+    - paloaltonetworks.panos
+
+
+  vars:
+    palo_provider:
+      ip_address: '192.168.1.10'
+      api_key: LUFRPT05M0Jtc1pzTjZOVktva1dJekVOd1ExZTZBK1U9cytDZ2NqQVZKSEF4UU5Td09jcU1Ld2JkWmdrb1p4NkthOWlNVEZDRUNxQXhEd0RHbVUveHdtT2F5RzFRN0xPcw
+      username: admin
+      password: Teabag22@
+
+  tasks:
+    - name: Create Server Object
+      panos_address_object:
+        provider: '{{ palo_provider }}'
+        name: 'server1'
+        value: '172.16.1.10'
+        description: 'vmware'
+
+    - name: Create Users Object
+      panos_address_object:
+        provider: '{{ palo_provider }}'
+        name: 'users-subnet'
+        value: '10.10.10.0/24'
+        description: 'users subnet'
+
+    - name: Management Profile
+      panos_management_profile:
+        provider: '{{ palo_provider }}'
+        name: 'Allow Ping'
+        ping: true
+
+    - name: Create INSIDE Zone
+      panos_zone:
+        provider: '{{ palo_provider}}'
+        zone: 'INSIDE'
+        mode: 'layer3' 
+    
+    - name: Create USERS Zone
+      panos_zone:
+        provider: '{{ palo_provider}}'
+        zone: 'USERS'
+        mode: 'layer3'
+
+    - name: ethernet1/1 config
+      panos_interface:
+        provider: '{{ palo_provider }}'
+        if_name: 'ethernet1/1'
+        zone_name: 'INSIDE'
+        management_profile: 'Allow Ping'
+        mode: 'layer3'
+        enable_dhcp: false
+        ip: ['172.16.1.1/24']
+
+    - name: ethernet1/2 config
+      panos_interface:
+        provider: '{{ palo_provider }}'
+        if_name: 'ethernet1/2'
+        zone_name: 'USERS'
+        mode: 'layer3'
+        enable_dhcp: false
+        ip: ['10.10.10.1/24']
+
+    - name: Allow ping from users to server1
+      panos_security_rule:
+        provider: '{{ palo_provider }}'
+        rule_name: 'allow ping'
+        description: 'Allow ping from users to server1'
+        source_zone: ['USERS']
+        source_ip: ['users-subnet']
+        destination_zone: ['INSIDE']
+        destination_ip: ['server1'] 
+        application: ['ping']
+        action: 'allow'
+
+    - name: Commit
+      panos_commit:
+        provider: '{{ palo_provider }}'
