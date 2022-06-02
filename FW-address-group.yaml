@@ -1,0 +1,22 @@
+---
+- name: Add some address groups to the firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Create static address group
+    panos_address_group:
+      provider: "{{ provider }}"
+      name: 'Prod-Instances'
+      static_value: ['Test-1.1.1.1', 'Test-2.2.2.2', 'Test-3.3.3.3']
+      tag: ['Prod']
+
+  - name: Create dynamic address group
+    panos_address_group:
+      provider: "{{ provider }}"
+      name: 'SI-Web-EPG'
+      dynamic_value: 'SI-Web-EPG'
+      tag: ['SI']

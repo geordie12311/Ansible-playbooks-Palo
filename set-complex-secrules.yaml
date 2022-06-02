@@ -1,0 +1,78 @@
+# FILENAME
+# playbook_set_complex_srule.yml
+# DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided in either host_vars.yaml or group_vars.yaml and set few security rules.
+# Good practice: The var files are in cleartext they should be edited and encrypted using: ansible-vault
+# REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+# EXECUTE
+# ansible-playbook playbook_set_complex_srule.yml
+---
+- hosts: Palo
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+    # permiting ssh to 1.1.1.1
+    - name: permit ssh to 1.1.1.1
+      panos_security_rule:
+        provider: "{{ provider }}"
+        rule_name: 'SSH permit'
+        description: 'SSH rule test'
+        source_zone: ['external']
+        destination_zone: ['internal']
+        source_ip: ['any']
+        source_user: ['any']
+        destination_ip: ['1.1.1.1']
+        category: ['any']
+        application: ['ssh']
+        service: ['application-default']
+        hip_profiles: ['any']
+        action: 'allow'
+        commit: false
+
+    # Allowing HTTP multimedia only from CDNs
+    - name: Allow HTTP multimedia only from CDNs
+      panos_security_rule:
+        provider: "{{ provider }}"
+        rule_name: 'HTTP Multimedia'
+        description: 'Allow HTTP multimedia only to host at 1.1.1.1'
+        source_zone: ['external']
+        destination_zone: ['internal']
+        source_ip: ['any']
+        source_user: ['any']
+        destination_ip: ['1.1.1.1']
+        category: ['content-delivery-networks']
+        application: ['http-video', 'http-audio']
+        service: ['service-http', 'service-https']
+        hip_profiles: ['any']
+        action: 'allow'
+        commit: false
+
+    # adding a more complex rule that uses profiles
+    - name: More complex fictitious rule that uses profiles
+      panos_security_rule:
+        provider: "{{ provider }}"
+        rule_name: "test rule 2"
+        log_start: false
+        log_end: true
+        action: 'allow'
+        antivirus: 'default'
+        vulnerability: 'default'
+        spyware: 'default'
+        url_filtering: 'default'
+        wildfire_analysis: 'default'
+        commit: false
+
+    # creating a deny all rule
+    - name: Deny all rules used as a 'catch-all' at the end
+      panos_security_rule:
+        provider: "{{ provider }}"
+        rule_name: 'DenyAll'
+        log_start: true
+        log_end: true
+        action: 'deny'
+        rule_type: 'interzone'
+...

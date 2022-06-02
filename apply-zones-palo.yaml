@@ -3,65 +3,14 @@
 # pip install pan-python
 # pip install pandevice
 # pip install xmltodict
-# ansible-galaxy install paloaltonetworks.paloaltonetworks
-# https://www.bountysource.com/issues/59738537-certificate-verify-failed
-#   set verify to disable in the virtual environment
-
 ---
-- hosts: panos
+- name: add zone trust
+  hosts: palo
   connection: local
   gather_facts: no
-  vars:
-    erase: false
-  vars_files:
-    - ./vars/default_vars.yml
-    - ./credentials/pan_credentials.yml
-
-  # roles:
-  #   - role: paloaltonetworks.paloaltonetworks
 
   tasks:
-
-    - block:
-      - name: add zone trust
-        paloaltonetworks.panos.panos_zone:
-          provider:
-            ip_address: "{{ ansible_host }}"
-            username: "{{ PAN_USERNAME }}"
-            password: "{{ PAN_PASSWORD }}"
-          zone: trust
-          mode: layer3
-          state: present
-
-      - name: add zone untrust
-        paloaltonetworks.panos.panos_zone:
-          provider:
-            ip_address: "{{ ansible_host }}"
-            username: "{{ PAN_USERNAME }}"
-            password: "{{ PAN_PASSWORD }}"
-          zone: untrust
-          mode: layer3
-          state: present
-      when: zone_state == "add"
-
-    - block:
-      - name: remove zone trust
-        paloaltonetworks.panos.panos_zone:
-          provider:
-            ip_address: "{{ ansible_host }}"
-            username: "{{ PAN_USERNAME }}"
-            password: "{{ PAN_PASSWORD }}"
-          zone: trust
-          mode: layer3
-          state: absent
-
-      - name: remove zone untrust
-        paloaltonetworks.panos.panos_zone:
-          provider:
-            ip_address: "{{ ansible_host }}"
-            username: "{{ PAN_USERNAME }}"
-            password: "{{ PAN_PASSWORD }}"
-          zone: untrust
-          mode: layer3
-          state: absent
-      when: zone_state == "remove"
+    paloaltonetworks.panos.panos_zone:
+      zone: trust
+      mode: layer3
+      state: present

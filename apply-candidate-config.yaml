@@ -6,14 +6,14 @@
 # ansible-galaxy install paloaltonetworks.paloaltonetworks
 
 ---
-- name: Apply ACLs to PAN Firewalls
-- hosts: Palo
+- name: Apply Candidate config to PAN Firewalls
+  hosts: Palo
   connection: local
   collections:
     - paloaltonetworks.panos
 
   tasks:
-    - name: commit candidate config on firewall
-      panos_commit:
-        provider: "{{ provider }}"
+  - name: commit candidate config on firewall
+    panos_commit_firewall:
+      provider: '{{ provider }}'
 ...

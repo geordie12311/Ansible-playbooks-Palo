@@ -1,0 +1,47 @@
+# DESCRIPTION
+# Playbook that will configure basic networking. In particular this script will:
+# - create layer 3 trust and untrust zones
+# - configure eth1/2 with DHCP and add it to untrust zone
+# - configure eth1/4 with DHCP and add it to trust zone
+# - set primary DNS server to Google's 8.8.8.8
+# - set NTP servers to 0.uk.pool.ntp.org and 1.uk.pool.ntp.org
+#
+# REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+#
+# EXECUTE
+# ansible-playbook palo-basic.yml
+---
+- name: Apply basic configuration to Palo FW
+  hosts: PA-FW-01
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks: 
+    - name: configure ethernet1/2
+      panos_interface:
+        provider: '{{ provider }}'
+        if_name: "ethernet1/2"
+        zone_name: "external"
+        create_default_route: "no"
+        commit: True
+
+    - name: configure ethernet1/4
+      panos_interface:
+        provider: '{{ provider }}'
+        if_name: "ethernet1/4"
+        zone_name: "internal"
+        create_default_route: "yes"
+        commit: True
+
+    - name: set DNS, NTP and a login banner
+      panos_mgtconfig:
+        provider: '{{ provider }}'
+        dns_server_primary: "8.8.8.8"
+        ntp_server_primary: "0.uk.pool.ntp.org"
+        ntp_server_secondary: "1.uk.pool.ntp.org"
+        timezone: "Europe/London"
+        login_banner: "Lab environment, do not enter unless authorised"
+        commit: True

@@ -1,0 +1,5 @@
+---
+
+ansible_user: paloalto
+ansible_password: paloalto123
+ansible_ios: panos

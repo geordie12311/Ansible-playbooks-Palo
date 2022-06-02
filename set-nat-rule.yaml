@@ -1,0 +1,41 @@
+# FILENAME
+# playbook to set a NAT rule
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and set a simple nat rule.
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook set-nat-rule.yml
+---
+- hosts: Palo
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks: 
+    - name: Create NAT rule for Web server
+      panos_nat_rule:
+        provider: "{{ provider }}"
+        rule_name: "NATWeb"
+        source_zone: ["external"]
+        destination_zone: "internal"
+        source_ip: ["any"]
+        destination_ip: ["10.0.0.100"]
+        service: "service-http"
+        snat_type: "dynamic-ip-and-port"
+        snat_interface: "ethernet1/2"
+        dnat_address: "10.0.1.101"
+        dnat_port: "80"
+        state: "present"
+
+    - name: add a rule to allow HTTP on custom port
+      panos_security_rule:
+        provider: "{{ provider }}"
+        rule_name: 'Web traffic'
+        service: 'service-http'
+        description: 'Allow HTTP traffic on custom port'
+        source_zone: ["external"]
+        destination_zone: "internal"
+        action: 'allow'
+        state: "present"

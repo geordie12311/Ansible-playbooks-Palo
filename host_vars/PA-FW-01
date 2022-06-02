@@ -1,0 +1,8 @@
+---
+provider:
+  api_key: LUFRPT12ZnpRa3RFd01HeFMwMUlteWpNbVJvZG13RzQ9c2RTamJJU3orYURyUWhsTFVGazNaYk9NNExnSHpLME5ROTFTYTg5UU0wV0FZQ002Z3RoNUFNcWE1MjFoZ3dybQ==
+  ip_address: "{{ ansible_host }}"
+
+adminusername: paloalto1
+adminpassword: paloalto123
+ansible_os: panos
