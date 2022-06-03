@@ -1,12 +1,12 @@
 # FILENAME
-# playbook to enable BGP, add a BGP peer, create BGP peer group + peer and create an aggregation rule
+# playbook to configure HA on Palo FW
 ## DESCRIPTION
 # Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
-# ansible-playbook palo-configure-bgp.yaml
+# ansible-playbook palo-configure-HA.yaml
 ---
 
 - hosts: PA-FW-01
@@ -15,7 +15,7 @@
     - paloaltonetworks.panos
  
   tasks: 
-- name: set ports to HA mode
+  - name: set ports to HA mode
   panos_interface:
     provider: '{{ provider }}'
     if_name: "{{ item }}"
@@ -57,5 +57,5 @@
     ha2_port: "ethernet1/3"
     ha2b_port: "ethernet1/4"
     ha3_port: "ethernet1/5"
-    commit: True
+    commit: true
 ...

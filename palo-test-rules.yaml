@@ -1,0 +1,78 @@
+# FILENAME
+# playbook to test a number of security rules
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-configure-bgp.yaml
+---
+
+- hosts: PA-FW-01
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+ 
+  tasks: 
+  - name: check security rules for Google DNS
+  panos_match_rule:
+    provider: '{{ provider }}'
+    source_ip: '10.0.0.0'
+    destination_ip: '8.8.8.8'
+    application: 'dns'
+    destination_port: '53'
+    protocol: '17'
+  register: result
+- debug: msg='{{ result.rule }}'
+
+- name: check security rules inbound SSH with user match
+  panos_match_rule:
+    provider: '{{ provider }}'
+    source_ip: '0.0.0.0'
+    source_user: 'mydomain\jsmith'
+    destination_ip: '192.168.100.115'
+    destination_port: '22'
+    protocol: '6'
+  register: result
+- debug: msg='{{ result.rule }}'
+
+- name: check NAT rules for source NAT
+  panos_match_rule:
+    provider: '{{ provider }}'
+    rule_type: 'nat'
+    source_zone: 'Prod-DMZ'
+    source_ip: '10.10.118.50'
+    to_interface: 'ethernet1/2'
+    destination_zone: 'Internet'
+    destination_ip: '0.0.0.0'
+    protocol: '6'
+  register: result
+- debug: msg='{{ result.rule }}'
+
+- name: check NAT rules for inbound web
+  panos_match_rule:
+    provider: '{{ provider }}'
+    rule_type: 'nat'
+    source_zone: 'Internet'
+    source_ip: '0.0.0.0'
+    to_interface: 'ethernet1/1'
+    destination_zone: 'Prod DMZ'
+    destination_ip: '192.168.118.50'
+    destination_port: '80'
+    protocol: '6'
+  register: result
+- debug: msg='{{ result.rule }}'
+
+- name: check security rules for outbound POP3 in vsys4
+  panos_match_rule:
+    provider: '{{ provider }}'
+    vsys_id: 'vsys4'
+    source_ip: '10.0.0.0'
+    destination_ip: '4.3.2.1'
+    application: 'pop3'
+    destination_port: '110'
+    protocol: '6'
+  register: result
+- debug: msg='{{ result.rule }}'
+...
