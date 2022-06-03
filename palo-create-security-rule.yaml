@@ -1,5 +1,14 @@
+# FILENAME
+# playbook to create a new policy and apply to the firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create security rule
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-create-security-rule.yaml
+
 ---
- 
 - name: Palo Alto Provision 
   hosts: PA-FW-01
   connection: local
@@ -23,3 +32,5 @@
         service: ['service-http']
         hip_profiles: ['any']
         action: 'allow'
+        commit: False
+...

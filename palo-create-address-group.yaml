@@ -1,0 +1,32 @@
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create an address group.
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-create-address-group.yaml
+---
+- hosts: PA-FW-01
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks: 
+  - name: Create object group 'Production'
+    panos_address_group:
+      provider: '{{ provider }}'
+      name: 'Prod'
+      dynamic_value: "'Prod_Instances'"
+      tag: ['Prod']
+      state: 'present'
+
+  - name: Create object group 'Servers'
+    panos_address_group:
+      provider: '{{ provider }}'
+      name: 'Servers'
+      dynamic_value: "'SI_Instances'"
+      tag: ['Server']
+      state: 'present'
+      commit: True
+...
+

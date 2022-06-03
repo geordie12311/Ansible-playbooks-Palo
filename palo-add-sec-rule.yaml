@@ -4,7 +4,7 @@
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 # EXECUTE
-# ansible-playbook playbook_set_srule.yml
+# ansible-playbook palo-add-sec-rule.yaml
 ---
 - hosts: Palo
   connection: local
@@ -15,8 +15,6 @@
     - name: permit ssh to 1.1.1.1
       panos_security_rule:
         provider: "{{ provider }}"
-      #  ip_address: "{{ ansible_host }}"
-      #  password: "{{adminpassword}}"
         rule_name: 'SSH permit'
         description: 'SSH rule test'
         source_zone: ['internal']

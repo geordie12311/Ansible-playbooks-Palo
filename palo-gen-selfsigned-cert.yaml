@@ -1,0 +1,27 @@
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files 
+# and create a self-signed certificate.
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-gen-selfsigned-cert.yaml
+
+---    
+- name: Generate a self-signed Cert
+  hosts: PA-FW-01
+  gather_facts: false
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+  
+  tasks:
+  - name: generate self signed certificate
+    panos_cert_gen_ssh:
+      ip_address: "192.168.1.163"
+      username: "paloalto"
+      password: "paloalto123"
+      cert_cn: "1.1.1.1"
+      cert_friendly_name: "test123"
+      signed_by: "root-ca"
+...

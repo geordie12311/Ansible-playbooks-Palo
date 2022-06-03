@@ -1,3 +1,13 @@
+# FILENAME
+# playbook to set a security rule
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-add-rule.yaml
+
 ---
  
 - name: Palo Alto Provision 
@@ -23,3 +33,4 @@
         service: ['service-http']
         hip_profiles: ['any']
         action: 'allow'
+...

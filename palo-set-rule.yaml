@@ -1,5 +1,3 @@
-# playbook to set a rule on the Palo
-#
 # DESCRIPTION
 # Example playbook that will connect to the firewall using credentials provided in the vars.yml and set a simple security rule.
 #
@@ -7,32 +5,21 @@
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 #
-# STEPS
-# update vars.yml with your own credentials/settings
-#
-# Good practice: The var files are provided in cleartext. They should be edited and encrypred using:
-# ansible-vault encrypt firewall-secrets.yml 
-#
 # EXECUTE
-# ansible-playbook playbook_set_srule.yml
+# ansible-playbook palo-set-rule.yaml
 
 ---
-- hosts: localhost
+- hosts: PA-FW-01
   connection: local
-
-  roles:
-    - role: PaloAltoNetworks.paloaltonetworks
+  collections:
+    - paloaltonetworks.panos
 
   tasks: 
-    - name: include variables (free-form)
-      include_vars: vars.yml  
-      no_log: 'yes'
-
-    - name: Create NAT rule for Web server
+  - name: "Create NAT rule for Web server"
       panos_nat_rule:
-        ip_address: "{{ mgmt_ip }}"
-        password: "{{admin_password}}"
-        operation: 'update'
+        panos_address_group:
+        provider: '{{ provider }}'
+        panos_nat_rule:
         rule_name: "NATWeb"
         source_zone: ["untrust"]
         destination_zone: "untrust"
@@ -55,6 +42,5 @@
         source_zone: ['untrust']
         destination_zone: ['trust']
         action: 'allow'
-        commit: "True"
-
+        commit: True
 ...        

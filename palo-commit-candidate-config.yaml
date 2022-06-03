@@ -4,16 +4,17 @@
 # pip install pandevice
 # pip install xmltodict
 # ansible-galaxy install paloaltonetworks.paloaltonetworks
-
+# EXECUTE
+# ansible-playbook palo-commmit-candidate-config.yaml
 ---
-- name: Apply ACLs to PAN Firewalls
-- hosts: Palo
+- name: Apply Candidate config to PAN Firewalls
+  hosts: PA-FW-01
   connection: local
   collections:
     - paloaltonetworks.panos
 
   tasks:
-    - name: commit candidate config on firewall
-      panos_commit:
-        provider: "{{ provider }}"
+  - name: commit candidate config on firewall
+    panos_commit_firewall:
+      provider: '{{ provider }}'
 ...

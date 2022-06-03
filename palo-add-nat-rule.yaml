@@ -6,7 +6,7 @@
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
-# ansible-playbook set-nat-rule.yml
+# ansible-playbook palo-add-nat-rule.yaml
 ---
 - hosts: Palo
   connection: local

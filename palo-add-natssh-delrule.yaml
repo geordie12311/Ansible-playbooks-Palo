@@ -1,8 +1,16 @@
-# Ansible playbook for Palo Alto Firewall to create a source and destination nat rule and disable a security rule
+# FILENAME
+# playbook to create a NAT SSH rulea and to disable a security rule
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and set a simple nat rule.
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-add-natssh-delrule.yaml
 
 ---
 - name: Create NAT SSH rule for 10.0.1.101
-  hosts: palo
+  hosts: PA-FW-01
   gather_facts: false
   connection: local
 
@@ -14,8 +22,8 @@
     panos_nat_rule:
       provider: '{{ provider }}'
       rule_name: "Web SSH"
-      source_zone: ["Outside"]
-      destination_zone: "Outside"
+      source_zone: ["external"]
+      destination_zone: "external"
       source_ip: ["any"]
       destination_ip: ["10.0.0.100"]
       service: "service-tcp-221"
@@ -29,4 +37,6 @@
       provider: '{{ provider }}'
       rule_name: 'Prod-Legacy 1'
       state: 'disable'
+...
+
   

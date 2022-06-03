@@ -1,8 +1,0 @@
-#add this to new folder called palo under group_vars
-
----
-
-palo_provider:
-
-  ip_address: '192.168.1.10'
-  api_key: '{{ vault_api_key }}'

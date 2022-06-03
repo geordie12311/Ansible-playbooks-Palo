@@ -1,0 +1,22 @@
+# DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and delete an object group.
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-del-objectgroup.yaml
+---
+- name: Delete Object Group
+  hosts: PA-FW-01
+  gather_facts: false
+  connection: local
+  collections:
+    - paloaltonetworks.panos  
+
+  tasks:
+  - name: Delete object 'Test-Two'
+    panos_address_object:
+      provider: '{{ provider }}'
+      name: 'Test-Two'
+      state: 'absent'
+...

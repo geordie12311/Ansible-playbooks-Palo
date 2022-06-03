@@ -11,7 +11,7 @@
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 #
 # EXECUTE
-# ansible-playbook palo-basic.yml
+# ansible-playbook palo-basic-net-config.yaml
 ---
 - name: Apply basic configuration to Palo FW
   hosts: PA-FW-01

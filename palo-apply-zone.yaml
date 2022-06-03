@@ -1,0 +1,34 @@
+# FILENAME
+# playbook to add a zone and apply it to an interface
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files.
+## REQUIREMENTS
+# pip install pan-python
+# pip install pandevice
+# pip install xmltodict
+## EXECUTE
+# ansible-playbook palo-apply-zone.yaml
+---
+- hosts: Palo
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Create DMZ Zone
+    panos_zone:
+      provider: '{{ provider }}'
+      zone: DMZ
+      mode: layer3
+      state: present
+
+  - name: Add interface ethernet1/2 to DMZ Zone
+    panos_interface:
+      provider: '{{ provider }}'
+      if_name: "ethernet1/2"
+      mode: "layer3"
+      ip: ["10.1.1.1/24"]
+      enable_dhcp: false
+      zone_name: "dmz"
+      commit: True
+...
