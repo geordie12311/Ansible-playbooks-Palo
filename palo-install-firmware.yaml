@@ -1,0 +1,37 @@
+# FILENAME
+# playbook to download and install firmware
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and set a simple nat rule.
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-install-firmware.yaml
+---
+- hosts: Palo
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks: 
+  - name: Install PAN-OS 10.1.5 and restart
+    panos_software:
+      provider: '{{ provider }}'
+      version: '10.0.4'
+      restart: true
+
+  - name: Download PAN-OS 10.1.4 base image only
+    panos_software:
+      provider: '{{ provider }}'
+      version: '10.1.5'
+      install: false
+      restart: false
+
+  - name: Download PAN-OS 10.1.5 and sync to HA peer
+    panos_software:
+      provider: '{{ provider }}'
+      version: '10.1.5'
+      sync_to_peer: true
+      install: false
+      restart: false
+...
