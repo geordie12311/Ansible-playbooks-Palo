@@ -1,0 +1,35 @@
+# FILENAME
+# playbook to create vlans
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and set a simple nat rule.
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-add-vlans.yaml
+---
+- hosts: Palo
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks: 
+- name: enable DHCP client on ethernet1/1 in zone public
+  panos_vlan_interface:
+    provider: '{{ provider }}'
+    name: "vlan.2"
+    zone_name: "public"
+    enable_dhcp: true
+    create_default_route: true
+
+- name: Configure vlan.7
+  panos_vlan_interface:
+    provider: '{{ provider }}'
+    name: "vlan.7"
+    ip: ["10.1.1.1/24"]
+    management_profile: "allow ping"
+    vlan_name: "dmz"
+    zone_name: "L3-untrust"
+    vr_name: "default"
+    commit: true
+...
