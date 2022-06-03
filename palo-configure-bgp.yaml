@@ -1,0 +1,51 @@
+# FILENAME
+# playbook to enable BGP, add a BGP peer, create BGP peer group + peer and create an aggregation rule
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-configure-bgp.yaml
+---
+
+- hosts: PA-FW-01
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+ 
+  tasks: 
+  - name: Configure and enable BGP
+    panos_bgp:
+      provider: '{{ provider }}'
+      router_id: '10.10.10.1'
+      local_as: '64512'
+
+  - name: Create the BGP Peer Group
+    panos_bgp_peer_group:
+      provider: '{{ provider }}'
+      name: 'peer-group-1'
+      enable: true
+      aggregated_confed_as_path: true
+      soft_reset_with_stored_info: false
+
+  - name: Create BGP Peer
+    panos_bgp_peer:
+      provider: '{{ provider }}'
+      peer_group: 'peer-group-1'
+      name: 'peer-1'
+      enable: true
+      local_interface: 'ethernet1/2'
+      peer_address_ip: '10.1.1.1'
+      peer_as: '64510'
+
+  - name: BGP use Redistribution Policy 1
+    panos_bgp_redistribute:
+      provider: '{{ provider }}'
+      name: '10.10.10.0/24'
+      enable: true
+      address_family_identifier: ipv4
+      set_origin: incomplete
+      vr_name: default 
+      commit: true
+...
