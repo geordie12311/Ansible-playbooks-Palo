@@ -1,0 +1,32 @@
+## PLAYBOOK
+# Playbook to configure BGP Peer 
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-configure-bgp-peer.yaml
+---
+- hosts: my-firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+    - name: Configure BGP Peer
+      panos_bgp_peer:
+        provider: '{{ provider }}'
+        state: present
+        name: peer-1
+        enable: false
+        peer_as: 64550
+        local_interface: ethernet1/1
+        peer_address_ip: 192.168.1.1
+        peer_group: peer-group-1
+        vr_name: default
+        commit: true
+...

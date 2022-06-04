@@ -1,0 +1,29 @@
+## PLAYBOOK
+# Playbook to retrieve the API key from the FW
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-get-api.yaml
+---
+- name: Collect the API Key information
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Retrieve API Key details
+    panos_api_key:
+    provider: '{{ provider }}'
+    register: auth
+
+  - name: Display API Key
+    debug:
+      var: '{{ auth.api_key }}'
+      verbosity: 0
+...

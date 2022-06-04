@@ -1,14 +1,14 @@
 ## PLAYBOOK
-# Playbook to configure BGP instance on FW
+# Playbook to gcommit pending firewall changes
 ## DESCRIPTION
 # Example playbook that will connect to the firewall using credentials provided saved in host var file 
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
-# ansible-playbook palo-configure-bgp.yaml
+# ansible-playbook palo-commit.yaml
 ---
-- name: Configure BGP on the Firewall
+- name: Firewall commit
   hosts: PA-FW-01
   connection: local
   gather_facts: False
@@ -17,13 +17,7 @@
     - paloaltonetworks.panos
 
   tasks:
-  - name: Configure BGP on a Virtual Router
-    panos_bgp:
+  - name: Commit pending firewall changes
+    panos_commit:
       provider: '{{ provider }}'
-      state: present
-      vr_name: default
-      enable: false
-      router_id: 192.168.1.1
-      local_as: 64512
-      commit: true
 ...

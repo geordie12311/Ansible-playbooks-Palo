@@ -1,0 +1,41 @@
+## PLAYBOOK
+# Playbook to configure BGP aggregated rules
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-bgp-create-aggrule.yaml
+---
+
+- name: Configure Aggregation Rules
+  hosts: my-firewall
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Grab the credentials from ansible-vault
+    include_vars: 'firewall-secrets.yml'
+    no_log: 'yes'
+
+  - name: Create BGP Aggregation Rule
+    panos_bgp_aggregate:
+      provider: '{{ provider }}'
+      vr_name: default
+      name: aggr-rule-01
+      prefix: 10.0.0.0/24
+      enable: true
+      summary: true
+
+  - name: Remove BGP Aggregation Rule
+    panos_bgp_aggregate:
+      provider: '{{ provider }}'
+      state: absent
+      vr_name: default
+      name: aggr-rule-01
+      commit: true
+...

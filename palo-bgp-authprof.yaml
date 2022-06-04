@@ -1,0 +1,45 @@
+## PLAYBOOK
+# Playbook to configure BGP authentication profile
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-bgp-authprof.yaml
+---
+- name: Configure BGP Authentication Profile
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Create BGP Auth Profile
+    panos_bgp_auth:
+      provider: '{{ provider }}'
+      vr_name: default
+      name: auth-profile-01
+      secret: '{{ bgp_auth_secret }}'
+# add bgp_auth_secret details to host var file
+
+  - name: Update BGP Auth Profile
+    panos_bgp_auth:
+      provider: '{{ provider }}'
+      vr_name: default
+      replace: true
+      name: auth-profile-01
+      secret: '{{ bgp_auth_secret }}'
+# add bgp_auth_secret details to host var file
+
+  - name: Remove BGP Auth Profile
+    panos_bgp_auth:
+      provider: '{{ provider }}'
+      state: absent
+      vr_name: default
+      name: auth-profile-01
+      commit: true
+...
+

@@ -1,0 +1,26 @@
+## PLAYBOOK
+# Playbook to check a given user is not an admin on the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-adminuser-notpresent.yaml
+
+- name: Make sure the given user is not present
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: 'Make sure "Jimmy" is not an admin'
+    panos_admin:
+      provider: '{{ provider }}'
+      admin_username: 'Jimmy'
+      state: 'absent'
+      commit: false
+...

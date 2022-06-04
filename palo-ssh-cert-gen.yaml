@@ -1,0 +1,33 @@
+## PLAYBOOK
+# Playbook to generate a ssh certificate
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-ssh-cert-gen.yaml
+---
+- name: Load already imported configuration
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  vars:
+    cn: "12.12.12.6"
+    friendly_name: "ssh-test-cert"
+    signed_by: "root-ca"
+# update the vars as required
+
+  tasks:
+  - name: generate self signed certificate
+    panos_cert_gen_ssh:
+      provider: '{{ provider }}'
+      cert_cn: "{{ cn }}"
+      cert_friendly_name: "{{ friendly_name }}"
+      signed_by: "{{ signed_by }}"
+      commit: true
+...

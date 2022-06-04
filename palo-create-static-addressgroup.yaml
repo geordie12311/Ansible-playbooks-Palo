@@ -1,0 +1,48 @@
+## PLAYBOOK
+# Playbook to create a static address group on the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-create-static-addressgroup.yaml
+---
+- name: Create Static Address Groups on the Firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  vars:
+    sag_name: "test2"
+    sag_match_filter: "'workday3' and 'box3'"
+# update the variables as required to provide sag_name and sag_match_filter. alternatively you can add these
+# to the host_var file and pull the data from there rather than in the playbook
+
+  tasks:
+  - name: Create Static Address Groups on PAN FW
+    panos_sag:
+      provider: '{{ provider }}'
+      sag_name: "test"
+      sag_match_filter: 'box3'
+      description: 'This is the first test address group'
+      tags: ['test-tag1']
+      operation: 'add'
+
+  - name: Create Static Address Groups on PAN FW
+    panos_sag:
+      provider: '{{ provider }}'
+      sag_name: "{{ sag_name }}"
+      sag_match_filter: "{{ sag_match_filter }}"
+      description: 'This is the 2nd test address group'
+      tags: ['test-tag2']
+      operation: 'add'
+# using the variables in the playbook to provide the sag_name and sag_match_filter details in this example
+
+  - name: Commit the changes to the firewall
+    panos_commit:
+      provider: '{{ provider }}'
+...

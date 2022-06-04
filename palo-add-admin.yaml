@@ -1,5 +1,7 @@
-# DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and add a new administrator
+## PLAYBOOK
+# Playbook to create a new administrator
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks

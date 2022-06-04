@@ -1,0 +1,48 @@
+## PLAYBOOK
+# Playbook to delect an IPSEC VPN and Tunnel on the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-delete-ipsecvpn.yaml
+---
+- name: This script deletes VPN IPSec profile and tunnel on the Firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+  
+  tasks:
+  - name: Delete IPSec tunnel from gateway
+    panos_ipsec_tunnel:
+      provider: '{{ provider }}'
+      state: 'absent'
+      name: 'IPSecTunnel-LAB'
+  
+  - name: Delete IKE gateway config from the firewall
+    panos_ike_gateway:
+      provider: '{{ provider }}'
+      state: 'absent'
+      name: 'IKEGW-LAB'
+
+  - name: Delete IPSec crypto config from the firewall
+    panos_ipsec_profile:
+      provider: '{{ provider }}'
+      state: 'absent'
+      name: 'IPSec-LAB'
+      commit: 'False'
+
+  - name: Delete IKE crypto config from the firewall
+    panos_ike_crypto_profile:
+      provider: '{{ provider }}'
+      state: 'absent'
+      name: 'IKE-LAB'
+
+  - name: Commit the changes to the firewall
+    panos_commit:
+      provider: '{{ provider }}'
+...

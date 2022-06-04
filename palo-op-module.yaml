@@ -1,0 +1,41 @@
+## PLAYBOOK
+# Playbook to demonstrate using OP module to pull back information from the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-op-module.yaml
+---
+- name: Demonstrating how the OP module can be used to execute various op commands on the Firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+
+  - name: Show all interfaces using ('show interface all')
+    panos_op:
+      provider: '{{ provider }}'
+      cmd: "show interface all"
+    register: result
+
+  - name: returned output in the default JSON format
+    debug: msg='{{ result.stdout }}'
+
+  - name: returned output in the XML format
+    debug: msg='{{ result.stdout_xml }}'
+
+  - name: Show system info op command
+    panos_op:
+      provider: '{{ provider }}'
+      cmd: 'show system info'
+    register: result
+
+  - name: returned output in the XML format
+    debug: msg='{{ result.stdout_xml }}'
+...

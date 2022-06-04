@@ -1,0 +1,28 @@
+## PLAYBOOK
+# Playbook to update BGP redistribution rule
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-bgp-update-redist-rule.yaml
+---
+- name: Update BGP Redistribution Rule
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+    - name: Update BGP Redistribution Rule
+      panos_bgp_redistribute:
+        provider: '{{ provider }}'
+        vr_name: default
+        name: redist-rule-01
+        enable: true
+        set_as_path_limit: 255
+        commit: true
+...

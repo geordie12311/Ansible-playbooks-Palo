@@ -1,0 +1,29 @@
+## PLAYBOOK
+# Playbook to validate an admin user is present on the FW
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-adminuser-present.yaml
+
+---
+
+- name: Validate the user is present and has the specified password
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: 'Admin "Jimmy" as a device admin administrator'
+    panos_admin:
+      provider: '{{ provider }}'
+      admin_username: 'Jimmy'
+      admin_password: 'secret123@'
+      superuser: true
+      commit: true
+...

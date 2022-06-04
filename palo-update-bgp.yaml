@@ -1,14 +1,14 @@
 ## PLAYBOOK
-# Playbook to configure BGP instance on FW
+# Playbook to update BGP instance on FW
 ## DESCRIPTION
 # Example playbook that will connect to the firewall using credentials provided saved in host var file 
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
-# ansible-playbook palo-configure-bgp.yaml
+# ansible-playbook palo-update-bgp.yaml
 ---
-- name: Configure BGP on the Firewall
+- name: Update BGP configuration
   hosts: PA-FW-01
   connection: local
   gather_facts: False
@@ -17,13 +17,16 @@
     - paloaltonetworks.panos
 
   tasks:
-  - name: Configure BGP on a Virtual Router
+    - name: Update BGP configuration
     panos_bgp:
       provider: '{{ provider }}'
       state: present
       vr_name: default
-      enable: false
+      enable: true
       router_id: 192.168.1.1
       local_as: 64512
+      reject_default_route: true
+      install_route: true
+      graceful_restart_enable: false
       commit: true
 ...

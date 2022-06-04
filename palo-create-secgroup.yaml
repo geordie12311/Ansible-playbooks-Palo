@@ -1,0 +1,43 @@
+## PLAYBOOK
+# Playbook to create a security profile group on the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-create-secgroup.yaml
+---
+- name: Setup a security profile group on the Firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  vars:
+    pg_name: "pg-test"
+    virus: "default"
+    spyware: "default"
+    vulnerability: "default"
+    url_filtering: "default"
+    wildfire: "default"
+# Setting the variables to be used by the task but these can be added and pulled from the host_vars file
+
+  tasks:
+  - name: Grab the credentials from ansible-vault
+    include_vars: 'firewall-secrets.yml'
+    no_log: 'yes'
+
+  - name: Setup security profile group
+    panos_pg:
+      provider: '{{ provider }}'
+      pg_name: "{{ pg_name }}"
+      virus: "{{ virus }}"
+      spyware: "{{ spyware }}"
+      vulnerability: "{{ vulnerability }}"
+      url_filtering: "{{ url_filtering }}"
+      wildfire: "{{ wildfire }}"
+      commit: true
+...

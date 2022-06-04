@@ -1,0 +1,51 @@
+## PLAYBOOK
+# Playbook to create virtual wire interfaces
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-add-vwire-interfaces.yaml
+---
+- name: Configure eth1/1 and eth1/2 in Vwire mode
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Set ethernet1/1 in virtual-wire mode
+    panos_interface:
+      provider: '{{ provider }}'
+      if_name: "ethernet1/1"
+      mode: "virtual-wire"
+      zone_name: "external"
+      enable_dhcp: false
+      vr_name:
+
+  - name: Set ethernet1/2 in virtual-wire mode
+    panos_interface:
+      provider: '{{ provider }}'
+      if_name: "ethernet1/2"
+      mode: "virtual-wire"
+      enable_dhcp: false
+      zone_name: "internal"
+      vr_name:
+
+  - name: Create Vwire
+    panos_virtual_wire:
+      provider: '{{ provider }}'
+      name: 'vwire1'
+      interface1: 'ethernet1/1'
+      interface2: 'ethernet1/2'
+      tag: 100
+      multicast: 'true'
+      pass_through: 'true'
+
+  - name: Commit the changes to the firewall
+    panos_commit:
+      provider: '{{ provider }}'
+...

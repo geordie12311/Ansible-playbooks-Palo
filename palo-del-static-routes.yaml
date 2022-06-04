@@ -1,0 +1,32 @@
+## PLAYBOOK
+# Playbook to delete a static routes on the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-del-static-routes.yaml
+---
+- name: Remove Static Routes on the firewall
+  hosts: my-firewall
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: PaloAltoNetworks.paloaltonetworks
+
+  tasks:
+    - name: Delete route 'test-route1'
+      panos_static_route:
+        provider: '{{ provider }}'
+        name: 'test-route1'
+        state: 'absent'
+
+    - name: Delete route 'test-route2'
+      panos_static_route:
+        provider: '{{ provider }}'
+        name: 'test-route2'
+        state: 'absent'
+        commit: true
+...

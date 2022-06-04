@@ -1,0 +1,67 @@
+## PLAYBOOK
+# Playbook to create a IPSEC VPN and Tunnel on the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-add-ipsecvpn.yaml
+---
+- name: This script creates a VPN IPSec profile and tunnel on the Firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Add IKE crypto config to the firewall
+    panos_ike_crypto_profile:
+      provider: '{{ provider }}'
+      state: 'present'
+      name: 'IKE-LAB'
+      dhgroup: 'group2'
+      authentication: 'sha1'
+      encryption: ['aes-256-cbc', '3des']
+      lifetime_sec: '28800'
+      commit: 'False'
+
+  - name: Add IPSec crypto config to the firewall
+    panos_ipsec_profile:
+      provider: '{{ provider }}'
+      state: 'present'
+      name: 'IPSec-LAB'
+      encryption: ['aes-256-cbc', '3des']
+      authentication: 'sha1'
+      dhgroup: 'group2'
+      lifetime_hrs: '8'
+
+  - name: Add IKE gateway config to the firewall
+    panos_ike_gateway:
+      provider: '{{ provider }}'
+      state: 'present'
+      name: 'IKEGW-LAB'
+      protocol_version: 'ikev2'
+      interface: 'ethernet1/1'
+      pasive_mode: 'True'
+      liveness_check: '5'
+      peer_ip_value: '10.10.10.10'
+      psk: 'SECRET12345'
+      crypto_profile_name: 'IKE-Ansible'
+
+
+  - name: Add IPSec tunnel to IKE gateway profile
+    panos_ipsec_tunnel:
+      provider: '{{ provider }}'
+      state: 'present'
+      name: 'IPSecTunnel-Ansible'
+      tunnel_interface: 'tunnel.2'
+      ike_gtw_name: 'IKEGW-LAB'
+      ipsec_profile: 'IPSec-LAB'
+
+  - name: Commit the changes to the firewall
+    panos_commit:
+      provider: '{{ provider }}'
+...

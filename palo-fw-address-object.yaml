@@ -1,0 +1,58 @@
+## PLAYBOOK
+# Playbook to add address objects to the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-fw-address-object.yaml
+---
+- name: Add some address objects to the firewall
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Grab the credentials from ansible-vault
+    include_vars: 'firewall-secrets.yml'
+    no_log: 'yes'
+
+  - name: Create object 'Test-One'
+    panos_address_object:
+      provider: '{{ provider }}'
+      name: 'Test-One'
+      value: '1.1.1.1'
+      description: 'Description One'
+      tag: ['Prod']
+
+  - name: Create object 'Test-Two'
+    panos_address_object:
+      provider: '{{ provider }}'
+      name: 'Test-Two'
+      address_type: 'ip-range'
+      value: '1.1.1.1-2.2.2.2'
+      description: 'Description Two'
+      tag: ['SI']
+
+  - name: Create object 'Test-Three'
+    panos_address_object:
+      provider: '{{ provider }}'
+      name: 'Test-Three'
+      address_type: 'fqdn'
+      value: 'foo.bar.baz'
+      description: 'Description Three'
+
+  - name: Delete object 'Test-Two'
+    panos_address_object:
+      provider: '{{ provider }}'
+      name: 'Test-Two'
+      state: 'absent'
+
+  - name: commit candidate config on firewall
+    panos_commit_firewall:
+      provider: '{{ provider }}'
+...

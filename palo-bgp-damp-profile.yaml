@@ -1,0 +1,56 @@
+## PLAYBOOK
+# Playbook to configure BGP dampening profile
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-bgp-damp-profile.yaml
+
+---
+- name: Configure BGP Dampening Profile
+  hosts: PA-FW-01
+  connection: local
+  gather_facts: False
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Create BGP Dampening Profile
+    panos_bgp_dampening:
+      provider: '{{ provider }}'
+      vr_name: default
+      name: damp-profile-01
+      enable: true
+      reuse: 1.0
+      max_hold_time: 60
+
+  - name: Update BGP Dampening Profile
+    panos_bgp_dampening:
+      provider: '{{ provider }}'
+      vr_name: default
+      name: damp-profile-01
+      enable: true
+      reuse: 0.5
+      max_hold_time: 90
+
+  - name: Disable BGP Dampening Profile
+    panos_bgp_dampening:
+      provider: '{{ provider }}'
+      vr_name: default
+      name: damp-profile-01
+      enable: false
+      reuse: 0.5
+      max_hold_time: 90
+
+  - name: Remove BGP Dampening Profile
+    panos_bgp_dampening:
+      provider: '{{ provider }}'
+      vr_name: default
+      state: absent
+      name: damp-profile-01
+      commit: true
+...
+
