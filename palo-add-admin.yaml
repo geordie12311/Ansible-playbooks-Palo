@@ -5,7 +5,7 @@
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
-## EXECUTE
+## EXECUTE SCRIPT
 # ansible-playbook palo-add-admin.yaml
 ---
 - name: Create new Admin user
