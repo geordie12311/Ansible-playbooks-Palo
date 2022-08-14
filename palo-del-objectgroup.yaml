@@ -7,9 +7,10 @@
 # ansible-playbook palo-del-objectgroup.yaml
 ---
 - name: Delete Object Group
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   gather_facts: false
   connection: local
+  
   collections:
     - paloaltonetworks.panos  
 

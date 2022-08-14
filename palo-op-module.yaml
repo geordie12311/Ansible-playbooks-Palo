@@ -9,7 +9,7 @@
 # ansible-playbook palo-op-module.yaml
 ---
 - name: Demonstrating how the OP module can be used to execute various op commands on the Firewall
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 

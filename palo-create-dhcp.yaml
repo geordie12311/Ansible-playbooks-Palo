@@ -1,5 +1,5 @@
 # DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create a DHCP client.
+# Playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create a DHCP client.
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
@@ -18,8 +18,11 @@
   - name: enable DHCP client on ethernet1/4 in zone External
     panos_interface:
       provider: '{{ provider }}'
-      if_name: "ethernet1/2"
-      zone_name: "external"
-      create_default_route: "no"
-      commit: true
+      if_name: "ethernet1/8"
+      vr_name: '{{ vr_name }}'
+      zone_name: "DMZ"
+      management_profile: "MGMT-Ping-Profile"
+      enable_dhcp: false
+      commit: false
+# add vr_name to host file
 ...

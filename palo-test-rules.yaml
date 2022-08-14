@@ -8,9 +8,11 @@
 ## EXECUTE
 # ansible-playbook palo-configure-bgp.yaml
 ---
-
-- hosts: PA-FW-01
+- name: test a number of security rules
+  hosts: PA-VM-02
   connection: local
+  gather_facts: False
+
   collections:
     - paloaltonetworks.panos
  

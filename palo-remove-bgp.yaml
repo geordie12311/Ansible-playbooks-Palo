@@ -9,7 +9,7 @@
 # ansible-playbook palo-remove-bgp.yaml
 ---
 - name: Remove BGP configuration on the Firewall
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 

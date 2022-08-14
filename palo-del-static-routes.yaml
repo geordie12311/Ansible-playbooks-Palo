@@ -9,9 +9,9 @@
 # ansible-playbook palo-del-static-routes.yaml
 ---
 - name: Remove Static Routes on the firewall
-  hosts: my-firewall
+  hosts: PA-VM-02
+  gather_facts: false
   connection: local
-  gather_facts: False
 
   roles:
     - role: PaloAltoNetworks.paloaltonetworks

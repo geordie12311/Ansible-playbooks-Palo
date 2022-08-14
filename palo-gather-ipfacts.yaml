@@ -10,9 +10,8 @@
 
 ---
 - name: Gather facts about registered IPs on the Firewall
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
-  gather_facts: False
 
   collections:
     - paloaltonetworks.panos

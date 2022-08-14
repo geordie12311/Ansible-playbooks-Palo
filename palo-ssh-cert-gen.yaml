@@ -9,7 +9,7 @@
 # ansible-playbook palo-ssh-cert-gen.yaml
 ---
 - name: Load already imported configuration
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 

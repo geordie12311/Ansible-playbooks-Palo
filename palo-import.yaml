@@ -2,9 +2,10 @@
 # Uses SSH to connect to the Firewall and config_file saved in same directory
 ---   
 - name: import config
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   gather_facts: false
   connection: local
+  
   collections:
     - paloaltonetworks.panos
 

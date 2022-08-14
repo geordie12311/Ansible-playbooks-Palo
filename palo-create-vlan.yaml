@@ -1,5 +1,5 @@
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create a VLAN.
+# Playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create a VLAN.
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
@@ -7,17 +7,17 @@
 # ansible-playbook palo-create-vlan.yaml
 
 ---
-- name: Create a VLAN
-  hosts: PA-FW-01
+- name: Create a VLAN on the FW
+  hosts: PA-VM-02
   gather_facts: false
   connection: local
   collections:
-    - paloaltonetworks.panos
+    - paloaltonetworks.panos.panos_vlan
 
   tasks:
     - name: Create VLAN 2
       panos_vlan:
         provider: '{{ provider }}'
-        name: 'Internal'
-        virtual_interface: ['vlan.2']
+        name: "test"
+        virtual_interface: 'vlan.2'
 ...

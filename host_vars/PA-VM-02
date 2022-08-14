@@ -9,3 +9,5 @@ provider:
 
 vr_name: LAB-VIR-RTR-1
 bgp_auth_secret: test12345
+api_key: LUFRPT1COUdLWE1YdFpwOWtScnl4alRCQVJQNjFqRVk9cytDZ2NqQVZKSEF4UU5Td09jcU1LOXZtNHRpMlhtY0RpR2JQYlp2NllkbTFDRjZmOFBYUlp5ZVY5NnNQcjhGTA==
+mgmt_ip: "{{ ansible_host }}"

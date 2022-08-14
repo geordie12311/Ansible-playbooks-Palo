@@ -9,38 +9,27 @@
 # ansible-playbook palo-set-rule.yaml
 
 ---
-- hosts: PA-FW-01
+- name: Creating NAT rules
+  hosts: PA-VM-02
   connection: local
+  gather_facts: False
+
   collections:
     - paloaltonetworks.panos
 
   tasks: 
   - name: "Create NAT rule for Web server"
-      panos_nat_rule:
-        panos_address_group:
-        provider: '{{ provider }}'
-        panos_nat_rule:
-        rule_name: "NATWeb"
-        source_zone: ["untrust"]
-        destination_zone: "untrust"
-        source_ip: ["any"]
-        destination_ip: ["10.0.0.100"]
-        service: "service-http"
-        snat_type: "dynamic-ip-and-port"
-        snat_interface: "ethernet1/2"
-        dnat_address: "10.0.1.101"
-        dnat_port: "80"
-        commit: "False"
-    - name: add a rule to allow HTTP on custom port
-      panos_security_rule:
-        ip_address: "{{ mgmt_ip }}"
-        password: "{{admin_password}}"
-        operation: 'update'
-        rule_name: 'Web traffic'
-        service: 'service-http'
-        description: 'Allow HTTP traffic on custom port'
-        source_zone: ['untrust']
-        destination_zone: ['trust']
-        action: 'allow'
-        commit: True
+    panos_nat_rule:
+      provider: '{{ provider }}'
+      rule_name: "NATWeb"
+      source_zone: ["Inside"]
+      destination_zone: "DMZ"
+      source_ip: ["any"]
+      destination_ip: ["10.0.0.100"]
+      service: "service-http"
+      snat_type: "dynamic-ip-and-port"
+      snat_interface: "ethernet1/2"
+      dnat_address: "10.0.1.101"
+      dnat_port: "80"
+      commit: False
 ...        

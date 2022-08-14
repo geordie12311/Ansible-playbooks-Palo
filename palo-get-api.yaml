@@ -9,7 +9,7 @@
 # ansible-playbook palo-get-api.yaml
 --- 
 - name: "retrieve api_key"
-  hosts: PA-VM-FAIL
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 

@@ -1,7 +1,7 @@
 ## PLAYBOOK
 # Playbook to delect an IPSEC VPN and Tunnel on the Firewall
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+# Playbook that will connect to the firewall using credentials provided saved in host var file 
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
@@ -9,9 +9,9 @@
 # ansible-playbook palo-delete-ipsecvpn.yaml
 ---
 - name: This script deletes VPN IPSec profile and tunnel on the Firewall
-  hosts: PA-FW-01
+  hosts: PA-VM-02
+  gather_facts: false
   connection: local
-  gather_facts: False
 
   collections:
     - paloaltonetworks.panos

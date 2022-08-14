@@ -1,5 +1,5 @@
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create service object and dynamic NAT.
+# Playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create service object and dynamic NAT.
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
@@ -8,10 +8,9 @@
 
 ---
 - name: Add New Security rule
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
-  collections:
-    - paloaltonetworks.panos
+  gather_facts: False
 
   collections:
     - paloaltonetworks.panos

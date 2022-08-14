@@ -8,8 +8,9 @@
 ## EXECUTE
 # ansible-playbook palo-install-firmware.yaml
 ---
-- hosts: Palo
+- hosts: PA-VM-02
   connection: local
+  gather_facts: False
   collections:
     - paloaltonetworks.panos
 

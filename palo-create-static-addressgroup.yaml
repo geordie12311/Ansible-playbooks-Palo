@@ -9,7 +9,7 @@
 # ansible-playbook palo-create-static-addressgroup.yaml
 ---
 - name: Create Static Address Groups on the Firewall
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 
@@ -25,7 +25,8 @@
   tasks:
   - name: Create Static Address Groups on PAN FW
     panos_sag:
-      provider: '{{ provider }}'
+      ip_address: '{{ mgmt_ip }}'
+      api_key: '{{ api_key }}'
       sag_name: "test"
       sag_match_filter: 'box3'
       description: 'This is the first test address group'
@@ -34,7 +35,8 @@
 
   - name: Create Static Address Groups on PAN FW
     panos_sag:
-      provider: '{{ provider }}'
+      ip_address: '{{ mgmt_ip }}'
+      api_key: '{{ api_key }}'
       sag_name: "{{ sag_name }}"
       sag_match_filter: "{{ sag_match_filter }}"
       description: 'This is the 2nd test address group'
