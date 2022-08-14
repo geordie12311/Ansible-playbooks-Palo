@@ -1,0 +1,8 @@
+---
+adminusername: padmin
+adminpassword: Paloalto123@
+ansible_os: panos
+
+provider:
+  api_key: 
+  ip_address: "{{ ansible_host }}"

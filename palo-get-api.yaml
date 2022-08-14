@@ -7,9 +7,9 @@
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
 # ansible-playbook palo-get-api.yaml
----
-- name: Collect the API Key information
-  hosts: PA-FW-01
+--- 
+- name: "retrieve api_key"
+  hosts: PA-VM-FAIL
   connection: local
   gather_facts: False
 
@@ -17,13 +17,10 @@
     - paloaltonetworks.panos
 
   tasks:
-  - name: Retrieve API Key details
-    panos_api_key:
-    provider: '{{ provider }}'
-    register: auth
-
-  - name: Display API Key
-    debug:
-      var: '{{ auth.api_key }}'
-      verbosity: 0
+    - name: Get API Key from device
+      panos_api_key: 
+        provider: "{{ provider }}"
+      register: auth
+    - debug: 
+        msg: "{{ auth.api_key }}"
 ...
