@@ -1,0 +1,17 @@
+  
+- name: Disable a specific NAT rule on the Firewall
+  hosts: PA-VM-PRI
+  gather_facts: false
+  connection: local
+
+  collections:
+    - paloaltonetworks.panos
+  
+  tasks:
+  - name: disable a specific NAT rule
+    panos_nat_rule:
+      provider: '{{ provider }}'
+      rule_name: 'Web SSH'
+      state: 'disable'
+      commit: true
+...

@@ -1,0 +1,23 @@
+# DESCRIPTION
+# Playbook that will configure basic networking. In particular this script will create layer configures BGP on Palo FW
+#
+# REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+#
+# EXECUTE
+# ansible-playbook palo-basic-net-config.yaml
+---
+- name: Apply basic configuration to Palo FW
+  hosts: PA-VM-02
+  connection: local
+  collections:
+    - paloaltonetworks.panos
+
+  tasks: 
+  - name: Configure and enable BGP
+    panos_bgp:
+      provider: '{{ provider }}'
+      router_id: '192.168.1.11'
+      local_as: '64512'
+      commit: yes

@@ -26,17 +26,12 @@
       destination_zone: "external"
       source_ip: ["any"]
       destination_ip: ["10.0.0.100"]
-      service: "service-tcp-221"
+      service: "TCP-port22"
       snat_type: "dynamic-ip-and-port"
-      snat_interface: "ethernet1/3"
+      snat_interface: "ethernet1/1"
       dnat_address: "10.0.1.101"
       dnat_port: "22"
-
-  - name: disable a specific security rule
-    panos_nat_rule:
-      provider: '{{ provider }}'
-      rule_name: 'Prod-Legacy 1'
-      state: 'disable'
 ...
+
 
   
