@@ -1,8 +1,9 @@
 ---
 provider:
-  # api_key: 
+  api_key: LUFRPT1lKzQyN05DV0VGSjdEUTBSMkxQeWM3NnN4R2c9cytDZ2NqQVZKSEF4UU5Td09jcU1LeUVPQXhDeUpoNmNvandIV24vUjAxV05OYTlWZ2k4ZjZGbXFvNmh4Tis5Uw==
   ip_address: "{{ ansible_host }}"
 
-adminusername: padmin
-adminpassword: Paloalto123@
+adminusername: admin
+adminpassword: Teabag22@
 ansible_os: panos
+

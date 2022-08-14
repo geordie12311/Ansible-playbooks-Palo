@@ -8,8 +8,8 @@
 ## EXECUTE
 # ansible-playbook palo-add-ipsecvpn.yaml
 ---
-- name: This script creates a VPN IPSec profile and tunnel on the Firewall
-  hosts: PA-FW-01
+- name: Create a VPN IPSec profile and tunnel on the Firewall
+  hosts: PA-VM-PRI
   connection: local
   gather_facts: False
 
@@ -21,47 +21,39 @@
     panos_ike_crypto_profile:
       provider: '{{ provider }}'
       state: 'present'
-      name: 'IKE-LAB'
-      dhgroup: 'group2'
-      authentication: 'sha1'
-      encryption: ['aes-256-cbc', '3des']
-      lifetime_sec: '28800'
-      commit: 'False'
-
-  - name: Add IPSec crypto config to the firewall
-    panos_ipsec_profile:
-      provider: '{{ provider }}'
-      state: 'present'
-      name: 'IPSec-LAB'
-      encryption: ['aes-256-cbc', '3des']
-      authentication: 'sha1'
-      dhgroup: 'group2'
-      lifetime_hrs: '8'
+      name: 'vpn-0cc61dd8c06f95cfd-0'
+      dh_group: ['group2']
+      authentication: ['sha1']
+      encryption: ['aes-128-cbc']
+      lifetime_seconds: '28800'
 
   - name: Add IKE gateway config to the firewall
     panos_ike_gateway:
       provider: '{{ provider }}'
       state: 'present'
-      name: 'IKEGW-LAB'
-      protocol_version: 'ikev2'
+      name: 'IKEGW-Ansible'
+      version: 'ikev2'
       interface: 'ethernet1/1'
-      pasive_mode: 'True'
-      liveness_check: '5'
-      peer_ip_value: '10.10.10.10'
-      psk: 'SECRET12345'
-      crypto_profile_name: 'IKE-Ansible'
-
+      enable_passive_mode: True
+      enable_liveness_check: True
+      liveness_check_interval: '5'
+      peer_ip_value: '1.2.3.4'
+      pre_shared_key: 'CHANGEME'
+      ikev2_crypto_profile: 'default'
+      commit: False
+  
+  - name: create tunnel.1
+    panos_tunnel:
+      provider: '{{ provider }}'
+      if_name: "tunnel.2"
+      ip: ["10.1.1.1/32"]
 
   - name: Add IPSec tunnel to IKE gateway profile
     panos_ipsec_tunnel:
       provider: '{{ provider }}'
-      state: 'present'
       name: 'IPSecTunnel-Ansible'
       tunnel_interface: 'tunnel.2'
-      ike_gtw_name: 'IKEGW-LAB'
-      ipsec_profile: 'IPSec-LAB'
+      ak_ike_gateway: 'IKEGW-Ansible'
+      ak_ipsec_crypto_profile: 'default'
 
-  - name: Commit the changes to the firewall
-    panos_commit:
-      provider: '{{ provider }}'
 ...
