@@ -1,0 +1,27 @@
+## PLAYBOOK
+# Playbook to disable a specific NAT rule on the Firewall
+## DESCRIPTION
+# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files
+## REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+## EXECUTE
+# ansible-playbook palo-disable-nat-rule.yaml
+
+---
+- name: Disable a specific NAT rule on the Firewall
+  hosts: PA-VM-02
+  gather_facts: false
+  connection: local
+
+  collections:
+    - paloaltonetworks.panos
+  
+  tasks:
+  - name: disable a specific NAT rule
+    panos_nat_rule:
+      provider: '{{ provider }}'
+      rule_name: 'Web SSH'
+      state: 'disable'
+      commit: true
+...
