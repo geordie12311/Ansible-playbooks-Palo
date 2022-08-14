@@ -1,7 +1,7 @@
 ## PLAYBOOK
 # Playbook to gcommit pending firewall changes
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+# Playbook that will connect to the firewall using credentials provided saved in host var file 
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
@@ -9,7 +9,7 @@
 # ansible-playbook palo-commit.yaml
 ---
 - name: Firewall commit
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 

@@ -1,14 +1,14 @@
 ## PLAYBOOK
-# Playbook to configure BGP instance on FW
+# Playbook to create a tunnel interface on the Firewall
 ## DESCRIPTION
 # Example playbook that will connect to the firewall using credentials provided saved in host var file 
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
-# ansible-playbook palo-configure-bgp.yaml
+# ansible-playbook palo-add-tunnel-interface.yaml
 ---
-- name: Configure BGP on the Firewall
+- name: Create tunnel interfaces on the Firewall
   hosts: PA-VM-02
   connection: local
   gather_facts: False
@@ -17,14 +17,14 @@
     - paloaltonetworks.panos
 
   tasks:
-  - name: Configure BGP on a Virtual Router
-    panos_bgp:
+  - name: create tunnel.3
+    panos_tunnel:
       provider: '{{ provider }}'
-      state: present
-      vr_name: '{{ vr_name }}'
-      enable: false
-      router_id: 192.168.1.11
-      local_as: 64512
-      commit: false
-# add vr_name to host file
+      if_name: "tunnel.3"
+      ip: ["10.1.1.1/32"]
+      comment: "tunnel interface"
+
+  - name: commit candidate config on firewall
+    panos_commit:
+      provider: '{{ provider }}'
 ...

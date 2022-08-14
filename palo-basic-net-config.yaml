@@ -13,28 +13,49 @@
 # EXECUTE
 # ansible-playbook palo-basic-net-config.yaml
 ---
-- name: Apply basic configuration to Palo FW
-  hosts: PA-FW-01
+- name: Apply basic network configuration to Palo FW
+  hosts: PA-VM-02
   connection: local
   collections:
     - paloaltonetworks.panos
 
   tasks: 
+      
+    - name: configure ethernet1/1
+      panos_interface:
+        provider: '{{ provider }}'
+        if_name: "ethernet1/1"
+        mode: "layer3"
+        ip: ["10.2.0.11/24"]
+        enable_dhcp: false
+        zone_name: "Inside"
+        vr_name: "LAB-VIR-RTR-1"
+        management_profile: "LAB-MGMT-PROFILE"
+        create_default_route: "no"
+
     - name: configure ethernet1/2
       panos_interface:
         provider: '{{ provider }}'
-        if_name: "ethernet1/2"
-        zone_name: "external"
+        if_name: "ethernet1/3"
+        mode: "layer3"
+        ip: ["210.1.1.1/24"]
+        enable_dhcp: false
+        zone_name: "DMZ"
+        vr_name: "LAB-VIR-RTR-1"
+        management_profile: "LAB-MGMT-PROFILE"
         create_default_route: "no"
-        commit: True
-
+     
     - name: configure ethernet1/4
       panos_interface:
         provider: '{{ provider }}'
-        if_name: "ethernet1/4"
-        zone_name: "internal"
-        create_default_route: "yes"
-        commit: True
+        if_name: "ethernet1/3"
+        mode: "layer3"
+        enable_dhcp: false
+        ip: ["172.16.2.11/24"]
+        zone_name: "DMZ"
+        vr_name: "LAB-VIR-RTR-1"
+        management_profile: "LAB-MGMT-PROFILE"
+        create_default_route: "no"
 
     - name: set DNS, NTP and a login banner
       panos_mgtconfig:
@@ -44,4 +65,5 @@
         ntp_server_secondary: "1.uk.pool.ntp.org"
         timezone: "Europe/London"
         login_banner: "Lab environment, do not enter unless authorised"
-        commit: True
+        commit: yes
+...

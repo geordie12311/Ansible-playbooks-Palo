@@ -7,8 +7,10 @@
 # ansible-playbook palo-create-dhcp.yaml
 ---
 - name: Add DHCP client on an interface
-  hosts: Palo
+  hosts: PA-VM-02
   connection: local
+  gather_facts: False
+  
   collections:
     - paloaltonetworks.panos
 
@@ -16,8 +18,8 @@
   - name: enable DHCP client on ethernet1/4 in zone External
     panos_interface:
       provider: '{{ provider }}'
-      if_name: "ethernet1/4"
+      if_name: "ethernet1/2"
       zone_name: "external"
-      create_default_route: "yes"
+      create_default_route: "no"
       commit: true
 ...

@@ -1,7 +1,8 @@
 ## PLAYBOOK
 # Playbook to configure BGP Peer Group
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+# Playbook that will connect to the firewall using credentials provided saved in host var file 
+# add vr_name to host var file
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
@@ -9,7 +10,7 @@
 # ansible-playbook palo-bgp-peer-group.yaml
 ---
 - name: Configure BGP Peer Group
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 
@@ -22,7 +23,7 @@
         provider: '{{ provider }}'
         state: present
         name: peer-group-1
-        vr_name: default
+        vr_name: '{{ vr_name }}'
         enable: false
         commit: true
 
@@ -31,7 +32,7 @@
         provider: '{{ provider }}'
         state: present
         name: peer-group-1
-        vr_name: default
+        vr_name: '{{ vr_name }}'
         enable: true
         aggregated_confed_as_path: true
         export_nexthop: use-self
@@ -46,6 +47,6 @@
         provider: '{{ provider }}'
         state: absent
         name: peer-group-1
-        vr_name: default
+        vr_name: '{{ vr_name }}'
         commit: true
 ...

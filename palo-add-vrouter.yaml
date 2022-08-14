@@ -8,7 +8,7 @@
 ## EXECUTE
 # ansible-playbook palo-add-vrouter.yaml
 ---
-- hosts: Palo
+- hosts: PA-VM-PRI
   connection: local
   collections:
     - paloaltonetworks.panos
@@ -18,4 +18,4 @@
     panos_virtual_router:
       provider: '{{ provider }}'
       name: VR-1
-      commit: true
+      commit: "true"

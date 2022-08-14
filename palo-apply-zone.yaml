@@ -9,7 +9,7 @@
 ## EXECUTE
 # ansible-playbook palo-apply-zone.yaml
 ---
-- hosts: Palo
+- hosts: PA-VM-02
   connection: local
   collections:
     - paloaltonetworks.panos
@@ -30,5 +30,5 @@
       ip: ["10.1.1.1/24"]
       enable_dhcp: false
       zone_name: "dmz"
-      commit: True
+      commit: False
 ...

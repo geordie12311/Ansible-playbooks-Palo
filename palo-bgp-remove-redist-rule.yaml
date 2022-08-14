@@ -1,7 +1,8 @@
 ## PLAYBOOK
 # Playbook to remove BGP redistribution rule
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in host var file 
+# Playbook that will connect to the firewall using credentials provided saved in host var file 
+# add vr_name to host var file
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
@@ -9,7 +10,7 @@
 # ansible-playbook palo-bgp-remove-redist-rule.yaml
 ---
 - name: Remove BGP Redistribution Rule
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 
@@ -21,7 +22,7 @@
       panos_bgp_redistribute:
         provider: '{{ provider }}'
         state: absent
-        vr_name: default
+        vr_name: '{{ vr_name }}'
         name: redist-rule-01
         commit: true
 ...

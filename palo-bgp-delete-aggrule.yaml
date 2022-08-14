@@ -9,7 +9,7 @@
 # ansible-playbook palo-bgp-delete-aggrule.yaml
 ---
 - name: Configure Aggregation Rules
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 
@@ -21,7 +21,8 @@
     panos_bgp_aggregate:
       provider: '{{ provider }}'
       state: absent
-      vr_name: default
+      vr_name: '{{ vr_name }}'
       name: aggr-rule-01
       commit: true
+# add vr_name to host file
 ...

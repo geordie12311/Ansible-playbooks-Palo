@@ -1,15 +1,18 @@
 # FILENAME
 # playbook to change user password
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and set a simple nat rule.
+# Playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and set a simple nat rule.
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
 # ansible-playbook palo-change-pass.yaml
 ---
-- hosts: PA-FW-01
+- name: Change a users password
+  hosts: PA-VM-02
   connection: local
+  gather_facts: False
+
   collections:
     - paloaltonetworks.panos
 
@@ -17,8 +20,8 @@
   - name: Change a users Password
     panos_administrator:
       provider: "{{ provider }}"
-      admin_username: test1
-      admin_password: secret1234@
+      admin_username: "test1"
+      admin_password: "secret1234@"
       state: "present"
       commit: True
 ...

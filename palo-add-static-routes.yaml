@@ -9,12 +9,12 @@
 # ansible-playbook palo-add-static-routes.yaml
 ---
 - name: Add Static Routes to the firewall
-  hosts: my-firewall
+  hosts: PA-VM-PRI
   connection: local
   gather_facts: False
 
-  roles:
-    - role: PaloAltoNetworks.paloaltonetworks
+  collections:
+    - paloaltonetworks.panos
 
   tasks:
   - name: Create first static route 'test-route1'
@@ -23,7 +23,7 @@
       name: 'test-route1'
       destination: '11.11.11.0/24'
       nexthop: '180.10.10.100'
-      virtual_router: "VR-1"
+      virtual_router: "LAB-VR-RTR-1"
 
   - name: Create second static route 'test-route2'
     panos_static_route:
@@ -31,7 +31,7 @@
       name: 'test-route2'
       destination: '12.12.12.0/24'
       nexthop: '180.10.10.100'
-      virtual_router: "VR-1"
+      virtual_router: "LAB-VR-RTR-1"
 
   - name: Create third static route 'test-route3'
     panos_static_route:
@@ -39,7 +39,7 @@
       name: 'Test-Three'
       destination: '13.13.13.0/24'
       nexthop: '180.10.10.100'
-      virtual_router: "VR-1"
+      virtual_router: "LAB-VR-RTR-1"
 
   - name: Create fourth static route 'test-route4'
     panos_static_route:
@@ -47,7 +47,7 @@
       name: 'Test-Four'
       destination: '14.14.14.0/24'
       nexthop: '180.10.10.100'
-      virtual_router: "VR-1"
+      virtual_router: "LAB-VR-RTR-1"
 
   - name: Create fifth static route 'test-route5'
     panos_static_route:
@@ -55,9 +55,10 @@
       name: 'Test-Five'
       destination: '15.15.15.0/24'
       nexthop: '180.10.10.100'
-      virtual_router: "VR-1"
+      virtual_router: "LAB-VR-RTR-1"
 
-  - name: Commit the changes to the firewall
-    panos_commit:
+  - name: Commit the changes to the Firewall
+    panos_commit_firewall:
       provider: '{{ provider }}'
+      description: 'adding new statice routes'
 ...

@@ -4,5 +4,8 @@ adminpassword: Paloalto123@
 ansible_os: panos
 
 provider:
-  api_key: 
+  api_key: LUFRPT1COUdLWE1YdFpwOWtScnl4alRCQVJQNjFqRVk9cytDZ2NqQVZKSEF4UU5Td09jcU1LOXZtNHRpMlhtY0RpR2JQYlp2NllkbTFDRjZmOFBYUlp5ZVY5NnNQcjhGTA==
   ip_address: "{{ ansible_host }}"
+
+vr_name: LAB-VIR-RTR-1
+bgp_auth_secret: test12345

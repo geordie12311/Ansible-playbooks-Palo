@@ -9,7 +9,7 @@
 # ansible-playbook palo-bgp-authprof.yaml
 ---
 - name: Configure BGP Authentication Profile
-  hosts: PA-FW-01
+  hosts: PA-VM-02
   connection: local
   gather_facts: False
 
@@ -20,26 +20,28 @@
   - name: Create BGP Auth Profile
     panos_bgp_auth:
       provider: '{{ provider }}'
-      vr_name: default
+      vr_name: '{{ vr_name }}'
       name: auth-profile-01
       secret: '{{ bgp_auth_secret }}'
 # add bgp_auth_secret details to host var file
+# add vr_name details to host var file
 
   - name: Update BGP Auth Profile
     panos_bgp_auth:
       provider: '{{ provider }}'
-      vr_name: default
+      vr_name: '{{ vr_name }}'
       replace: true
       name: auth-profile-01
       secret: '{{ bgp_auth_secret }}'
 # add bgp_auth_secret details to host var file
+# add vr_name details to host var file
 
   - name: Remove BGP Auth Profile
     panos_bgp_auth:
       provider: '{{ provider }}'
       state: absent
-      vr_name: default
+      vr_name: '{{ vr_name }}'
       name: auth-profile-01
-      commit: true
+      commit: yes
 ...
 

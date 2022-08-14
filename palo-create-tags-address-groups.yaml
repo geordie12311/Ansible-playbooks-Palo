@@ -1,10 +1,11 @@
 ## DESCRIPTION
-# Example playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create an address group.
+# Playbook that will connect to the firewall using credentials provided saved in either host.yaml or vars.yaml files and create an address group.
+# Playbook will create tags and new address groups
 ## REQUIREMENTS
 # pip install ansible
 # ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 ## EXECUTE
-# ansible-playbook palo-create-address-group.yaml
+# ansible-playbook palo-create-tags-address-groups.yaml
 ---
 - name: Creat an Address Group on the FW
   hosts: PA-VM-02
@@ -15,6 +16,20 @@
     - paloaltonetworks.panos
 
   tasks: 
+  - name: Create tag object 'Prod'
+    panos_tag_object:
+      provider: '{{ provider }}'
+      name: 'Prod'
+      color: 'gold'
+      comments: 'Production Environment'
+
+  - name: Create tag object 'Servers'
+    panos_tag_object:
+      provider: '{{ provider }}'
+      name: 'Win-Server'
+      color: 'salmon'
+      comments: 'windows server'
+
   - name: Create object group 'Production'
     panos_address_group:
       provider: '{{ provider }}'
@@ -26,9 +41,9 @@
   - name: Create object group 'Servers'
     panos_address_group:
       provider: '{{ provider }}'
-      name: 'Servers'
+      name: 'Win-Servers'
       dynamic_value: "'SI_Instances'"
-      tag: 'Server'
+      tag: 'Win-Server'
       state: 'present'
       commit: True
 ...
