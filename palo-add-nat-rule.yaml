@@ -8,34 +8,23 @@
 ## EXECUTE
 # ansible-playbook palo-add-nat-rule.yaml
 ---
-- hosts: Palo
+- hosts: PA-VM-PRI
   connection: local
   collections:
     - paloaltonetworks.panos
 
   tasks: 
-    - name: Create NAT rule for Web server
-      panos_nat_rule:
-        provider: "{{ provider }}"
-        rule_name: "NATWeb"
-        source_zone: ["external"]
-        destination_zone: "internal"
-        source_ip: ["any"]
-        destination_ip: ["10.0.0.100"]
-        service: "service-http"
-        snat_type: "dynamic-ip-and-port"
-        snat_interface: "ethernet1/2"
-        dnat_address: "10.0.1.101"
-        dnat_port: "80"
-        state: "present"
-
-    - name: add a rule to allow HTTP on custom port
-      panos_security_rule:
-        provider: "{{ provider }}"
-        rule_name: 'Web traffic'
-        service: 'service-http'
-        description: 'Allow HTTP traffic on custom port'
-        source_zone: ["external"]
-        destination_zone: "internal"
-        action: 'allow'
-        state: "present"
+  - name: Create NAT SSH rule for 10.0.1.101
+    panos_nat_rule:
+      provider: '{{ provider }}'
+      rule_name: "Web SSH"
+      source_zone: ["Outside"]
+      destination_zone: "Outside"
+      source_ip: ["any"]
+      destination_ip: ["10.0.0.100"]
+      service: "any"
+      snat_type: "dynamic-ip-and-port"
+      snat_interface: "ethernet1/1"
+      dnat_address: "10.0.1.101"
+      dnat_port: "22"
+...
