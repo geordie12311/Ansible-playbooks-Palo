@@ -1,0 +1,27 @@
+# palo-download-install-panos.yaml
+# DESCRIPTION
+# Playbook that will connect to the firewall using credentials provided in either host_vars.yaml or group_vars.yaml
+# The playbook will download the specified version of pan-os, install it and then restart the FW.
+# Good practice: The var files are in cleartext they should be edited and encrypted using: ansible-vault
+# REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+# EXECUTE
+# ansible-playbook palo-download-install-panos.yaml
+---
+- name: Create complex set of Security Rules
+  hosts: PA-VM-02
+  connection: local
+  gather_facts: false
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+ - name: ownload PAN-OS 10.1.14, install and restart
+  panos_software:
+    provider: '{{ provider }}'
+    version: '10.1.14'
+    restart: true
+...
+  

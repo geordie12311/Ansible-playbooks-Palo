@@ -1,0 +1,35 @@
+# FILENAME
+# palo-download-install-panos-hasync.yaml
+# DESCRIPTION
+# Playbook that will connect to the firewall using credentials provided in either host_vars.yaml or group_vars.yaml and install pan-os version, sync to peer and install.
+# Good practice: The var files are in cleartext they should be edited and encrypted using: ansible-vault
+# REQUIREMENTS
+# pip install ansible
+# ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+# EXECUTE
+# ansible-playbook palo-download-install-panos-HAsync.yaml
+---
+- name: Create complex set of Security Rules
+  hosts: PA-VM-02
+  connection: local
+  gather_facts: false
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Download PAN-OS 10.1.14 and sync to HA peer
+  panos_software:
+    provider: '{{ provider }}'
+    version: '10.1.14'
+    sync_to_peer: true
+    install: false
+    restart: false
+
+- name: Install PAN-OS 10.1.14 and restart
+  panos_software:
+    provider: '{{ provider }}'
+    version: '10.1.14'
+    restart: true
+...
+  

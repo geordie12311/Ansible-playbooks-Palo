@@ -1,0 +1,34 @@
+---
+## NAME: palo-fw-shutdown.yaml
+# Shuts down a PAN-OS device.
+#
+# DESRIPTION:
+# This issues the shutdown command using the 'panos_op' module.  This uses the Ansible 'ignore_errors' keyword because
+# issuing the shutdown command terminates the API connection.
+#
+# This playbook requires connection details for the device to be specified in the variables 'ip_address', 'username',
+# and 'password'.  These may be defined as host variables for an example or extra vars.
+#
+## MODULES:
+# panos_op - https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_op.html
+#
+## COMMAND TO RUN PLAYBOOK:
+# ansible-playbook palo-fw-shutdown.yaml
+
+ ---
+ - name: Shutdown the Firewall
+  hosts: PA-FW-02
+  connection: local
+  gather_facts: false
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+    - name: Issue firewall shutdown command
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ provider }}'
+        cmd: '<request><shutdown><system></system></shutdown></request>'
+        cmd_is_xml: true
+      ignore_errors: true
+...
