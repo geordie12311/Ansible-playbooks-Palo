@@ -1,0 +1,5 @@
+Install the following libraries:
+packaging
+msrestazure
+ansible[azure]
+pan-python
